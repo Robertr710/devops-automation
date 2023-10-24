@@ -1,5 +1,6 @@
-import logo from './logo.svg';
-import './App.css';
+const logo = require('./logo.svg')
+require('./App.css');
+
 
 function App() {
   return (
