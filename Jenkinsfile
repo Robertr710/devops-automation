@@ -8,11 +8,10 @@ pipeline {
             }
         }
         stage('Install dependencies') {
-            steps{
+            steps {
                 sh "npm install"
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
@@ -21,7 +20,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build React Application') {
             steps {
                 script {
@@ -30,18 +28,33 @@ pipeline {
                 }
             }
         }
-
         stage('Push to Docker Hub') {
             steps {
                 script {
                     // Tag the Docker image and push it to Docker Hub
                     // Credentials usage with credentials block
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_id', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-    sh "docker login -u $USERNAME -p $PASSWORD"
+                        sh "docker login -u $USERNAME -p $PASSWORD"
                         sh "docker push rrodriguez4570/devops-automation:latest"
-                    }   
+                    }
                 }
             }
         }
+        stage('Deploy to Dev Kubernetes') {
+            steps {
+                script {
+                    // Apply Kubernetes Deployment and Service YAML files for the development environment
+                    sh "kubectl apply -f dev-deployment.yaml"
+                    sh "kubectl apply -f dev-service.yaml"
+                }
+            }
+        }
+       
     }
 }
+
+
+
+
+
+
