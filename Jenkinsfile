@@ -36,3 +36,4 @@ pipeline {
 
 //test1
 //test2
+//test to see amazon ECR update image 
