@@ -19,16 +19,11 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Push to ECR') {
     steps {
         script {
-            // Tag the Docker image and push it to Docker Hub
-            // Credentials usage with credentials block
-            withCredentials([usernamePassword(credentialsId: 'dockerhub_id', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                sh "docker login -u $USERNAME -p $PASSWORD"
-                sh "docker push rrodriguez4570/devops-automation:latest"
-            
-            }
+           sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 624435411155.dkr.ecr.us-east-1.amazonaws.com'
+           sh 'docker push 624435411155.dkr.ecr.us-east-1.amazonaws.com/devops-automation-ecr:latest'
         }
     }
 }    
