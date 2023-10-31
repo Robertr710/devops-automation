@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        registry = 624435411155.dkr.ecr.us-east-1.amazonaws.com/devops-automation-ecr
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -11,7 +14,7 @@ pipeline {
             steps {
                 script {
                     // Build a Docker image from the project's root directory
-                    sh "docker build -t rrodriguez4570/devops-automation:latest ."
+                  dockerimage = docker.build registry
                 }
             }
         }
