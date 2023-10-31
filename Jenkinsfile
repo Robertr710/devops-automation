@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        registry = 624435411155.dkr.ecr.us-east-1.amazonaws.com/devops-automation-ecr
+        registry = "624435411155.dkr.ecr.us-east-1.amazonaws.com/devops-automation-ecr"
     }
     stages {
         stage('Checkout') {
