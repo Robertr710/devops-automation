@@ -16,7 +16,7 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub/Delete container and image') {
+        stage('Push to Docker Hub') {
     steps {
         script {
             // Tag the Docker image and push it to Docker Hub
