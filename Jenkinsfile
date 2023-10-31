@@ -7,11 +7,6 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'githubtoken', url: 'https://github.com/Robertr710/devops-automation']])
             }
         }
-        stage('Install dependencies') {
-            steps {
-                sh "npm install"
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -20,15 +15,8 @@ pipeline {
                 }
             }
         }
-        stage('Build React Application') {
-            steps {
-                script {
-                    // Perform the build (e.g., using Webpack or other build tools) in the project's root directory
-                    sh 'npm run build'
-                }
-            }
-        }
-        stage('Push to Docker Hub') {
+
+        stage('Push to Docker Hub/Delete container and image') {
             steps {
                 script {
                     // Tag the Docker image and push it to Docker Hub
@@ -36,6 +24,14 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_id', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                         sh "docker login -u $USERNAME -p $PASSWORD"
                         sh "docker push rrodriguez4570/devops-automation:latest"
+                        def containerId = sh(script: "docker ps -l -q --filter ancestor=rrodriguez4570/devops-automation:latest", returnStatus: true).trim()
+                        if (containerId) {
+                            sh "docker stop $containerID"
+                        }
+                        def imageId= sh(script: "docker images -q rrodriguez4570/devops-automation:latest", returnStatus: true).trim()
+                        if (imageId) {
+                            sh "docker rmi $imageId"
+                        }
                     }
                 }
             }
