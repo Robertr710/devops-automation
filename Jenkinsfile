@@ -45,17 +45,7 @@ pipeline {
             }
         }
     }
-}
-        stage('Deploy to Dev Kubernetes') {
-            steps {
-                script {
-                    // Apply Kubernetes Deployment and Service YAML files for the development environment
-                    sh "kubectl apply -f dev-deployment.yaml"
-                    sh "kubectl apply -f dev-service.yaml"
-                }
-            }
-        }
-       
+}    
     }
 }
 
